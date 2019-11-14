@@ -15,7 +15,6 @@ public class Arbitre extends Personne {
     /**
      * Constructeur de l'Arbitre
      * @param nomNaissance sous forme de string
-     * @param nomCourant sous forme de string
      * @param prenom sous forme de string
      * @param surnom sous forme de string
      * @param dateNaissance sous forme de string
@@ -26,8 +25,8 @@ public class Arbitre extends Personne {
      * @param taille sous forme de int
      * @param poids  sous forme de int
      */
-    public Arbitre(String nomNaissance, String nomCourant, String prenom, String surnom, String dateNaissance, String lieuNaissance, String dateDeces, String nationalite, String genre, int taille, float poids) {
-        super(nomNaissance, nomCourant, prenom, surnom, dateNaissance, lieuNaissance, dateDeces, nationalite, genre, taille, poids);
+    public Arbitre(String nomNaissance, String prenom, String surnom, String dateNaissance, String lieuNaissance, String dateDeces, String nationalite, String genre, int taille, float poids) {
+        super(nomNaissance, prenom, surnom, dateNaissance, lieuNaissance, dateDeces, nationalite, genre, taille, poids);
     }
     
     

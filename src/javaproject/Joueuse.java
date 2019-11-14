@@ -12,9 +12,9 @@ package javaproject;
 public class Joueuse extends Tennisman{
     private String couleurJupe;
     
-    public Joueuse(String main, String sponsor, int classement, String entraineur, String couleurJupe, String nomCourant, String nomNaissance, String prenom, String surnom, String dateNaissance, String lieuNaissance, String dateDeces, String nationalite, String genre, int taille, float poids){
+    public Joueuse(String main, String sponsor, int classement, String entraineur, String couleurJupe, String nomNaissance, String prenom, String surnom, String dateNaissance, String lieuNaissance, String dateDeces, String nationalite, String genre, int taille, float poids){
         
-        super(main, sponsor, classement, entraineur, nomNaissance, nomCourant, prenom, surnom, dateNaissance, lieuNaissance, dateDeces, nationalite, genre, taille, poids);
+        super(main, sponsor, classement, entraineur, nomNaissance, prenom, surnom, dateNaissance, lieuNaissance, dateDeces, nationalite, genre, taille, poids);
         this.couleurJupe = couleurJupe;
     }
     

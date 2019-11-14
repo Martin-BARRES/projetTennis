@@ -101,7 +101,6 @@ abstract class Personne {
     /**
      * Constructeur de Personne
      * @param nomNaissance sous forme de string
-     * @param nomCourant sous forme de string
      * @param prenom sous forme de string
      * @param surnom sous forme de string
      * @param dateNaissance sous forme de string
@@ -112,9 +111,8 @@ abstract class Personne {
      * @param taille sous forme de int
      * @param poids  sous forme de int
      */
-    Personne(String nomNaissance, String nomCourant, String prenom, String surnom, String dateNaissance, String lieuNaissance, String dateDeces, String nationalite, String genre, int taille, float poids) {
+    Personne(String nomNaissance, String prenom, String surnom, String dateNaissance, String lieuNaissance, String dateDeces, String nationalite, String genre, int taille, float poids) {
         this.nomNaissance = nomNaissance;
-        this.nomCourant = nomCourant;
         this.prenom = prenom;
         this.surnom = surnom;
         this.dateNaissance = dateNaissance;

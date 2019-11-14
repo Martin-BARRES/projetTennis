@@ -1,0 +1,14 @@
+rouge
+bleu
+vert
+orange
+rose
+marron
+noir
+rose
+violet
+cyan
+turquoise
+bordeau
+taupe
+creme

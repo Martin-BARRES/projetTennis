@@ -15,8 +15,8 @@ abstract class Supporter extends Personne {
     private float prixPlace;
     private String tribune;
     
-    public Supporter(float prix, String tribune, int num_place, String nomCourant, String nomNaissance, String prenom, String surnom, String dateNaissance, String lieuNaissance, String dateDeces, String nationalite, String genre, int taille, int poids){
-        super(nomNaissance, nomCourant, prenom, surnom, dateNaissance, lieuNaissance, dateDeces, nationalite, genre, taille, poids);
+    public Supporter(float prix, String tribune, int num_place, String nomNaissance, String prenom, String surnom, String dateNaissance, String lieuNaissance, String dateDeces, String nationalite, String genre, int taille, int poids){
+        super(nomNaissance, prenom, surnom, dateNaissance, lieuNaissance, dateDeces, nationalite, genre, taille, poids);
         this.prixPlace = prix;
         this.tribune = tribune;
         this.numeroPlace = num_place;

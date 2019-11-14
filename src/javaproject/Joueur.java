@@ -12,8 +12,8 @@ package javaproject;
 public class Joueur extends Tennisman{
     private String couleurShort;
     
-    public Joueur(String main, String sponsor, int classement, String entraineur, String couleurShort, String nomCourant, String nomNaissance, String prenom, String surnom, String dateNaissance, String lieuNaissance, String dateDeces, String nationalite, String genre, int taille, float poids) {
-        super(main, sponsor, classement, entraineur, nomNaissance, nomCourant, prenom, surnom, dateNaissance, lieuNaissance, dateDeces, nationalite, genre, taille, poids);
+    public Joueur(String main, String sponsor, int classement, String entraineur, String couleurShort, String nomNaissance, String prenom, String surnom, String dateNaissance, String lieuNaissance, String dateDeces, String nationalite, String genre, int taille, float poids) {
+        super(main, sponsor, classement, entraineur, nomNaissance, prenom, surnom, dateNaissance, lieuNaissance, dateDeces, nationalite, genre, taille, poids);
         this.couleurShort = couleurShort;
     }
     

@@ -255,18 +255,59 @@ public class Echange {
         this.serveuse = serveuse;
     }
     
-    public void jouerAuto(Joueur joueur1, Joueur joueur2){
-        int randomResult;
+    /**
+     * Demande à l'utilisateur si le serveur se voit faire :
+     * 1 une faute au service
+     * 2 une let
+     * 3 un échange correcte
+     * @see Echange#jouerEchange(tennis.Joueur, tennis.Joueur) 
+     * @see Echange#jouerEchange(tennis.Joueuse, tennis.Joueuse) 
+     * @return résultat sous forme d'integer
+     */
+    public int entrerResultat() {
+        boolean saisieCorrecte = false;
         
-        System.out.println("Service de " + this.serveur.getPrenom() + " " + this.serveur.getNomNaissance());
+        Scanner sc = new Scanner(System.in);
+        String saisie = "";
         
-        Random r = new Random();
-        randomResult = 1 + r.nextInt(4 - 1);
+        while(saisieCorrecte == false) {
+            System.out.println("Entrer le résultat :");
+            System.out.println("1 - Faute au service \n2 - Let \n3 - Echange correct \n");
+            saisie = sc.nextLine();
+            
+            if(saisie.equals("1") || saisie.equals("2") || saisie.equals("3") ) {
+                saisieCorrecte = true;
+            } else {
+                System.out.println("--- Saisie incorrecte ! ---");
+            }
+        }
+
+        int resultat = Integer.parseInt(saisie);
         
-        switch(randomResult) {
+        return resultat;
+    }
+    
+
+    /**
+     * jouerEchange réalise:
+     * - L'arbitre annonce le serveur
+     * - Annonce le vainqueur si le serveur réalise une faute au service
+     * - Demande à l'utilisateur quel sera le vainqueur de l'échange et l'annonce
+     * @param joueur1 sous forme de joueur
+     * @param joueur2 sous forme de joueur
+     */
+    public void jouerEchange(Joueur joueur1, Joueur joueur2) {
+        int resultat;
+        
+        while(true) {
+            this.arbitre.annoncer("Service de " + this.serveur.getPrenom() + " " + this.serveur.getNomNaissance());
+            
+            resultat = entrerResultat();
+            
+            switch(resultat) {
                 case 1:
                     if(numeroService == 2) {
-                        if(this.serveur == this.joueur1) {
+                        if(serveur == joueur1) {
                             this.gagnantEchange = this.joueur2;
                         } else {
                             this.gagnantEchange = this.joueur1;
@@ -274,11 +315,8 @@ public class Echange {
                         
                         numeroService = 1;
                         this.arbitre.annoncer("Le gagnant de l'échange est : " + this.gagnantEchange.getPrenom() + " " + this.gagnantEchange.getNomNaissance() );
-                        
-                        
                         return;
-                    } 
-                    else {
+                    } else {
                         numeroService++;
                     }
                     break;
@@ -288,33 +326,406 @@ public class Echange {
                     break;
                 
                 case 3:
-
-                    System.out.println("Joueur gagnant de l'échange ? :");
-                    System.out.println("1 - " + this.joueur1.getPrenom() + " " + this.joueur1.getNomNaissance() + "\n" + "2 - " + this.joueur2.getPrenom() + " " + this.joueur2.getNomNaissance() + "\n");
+                    Scanner sc = new Scanner(System.in);
+                    String saisie = "";
+                    boolean saisieCorrecte = false;
                     
+                    while(saisieCorrecte == false) {
+                        System.out.println("Joueur gagnant de l'échange ? :");
+                        System.out.println("1 - " + this.joueur1.getPrenom() + " " + this.joueur1.getNomNaissance() + "\n" + "2 - " + this.joueur2.getPrenom() + " " + this.joueur2.getNomNaissance() + "\n");
+                        saisie = sc.nextLine();
+                        
+                        if(saisie.equals("1") || saisie.equals("2")) {
+                            saisieCorrecte = true;
+                        } else {
+                            System.out.println("--- Saisie incorrecte ! ---");
+                        }
+                    }
+                    
+                    if(saisie.equals("1")) {
+                        this.gagnantEchange = this.joueur1;
+                        this.arbitre.annoncer("Le gagnant de l'échange est : " + this.gagnantEchange.getPrenom() + " " + this.gagnantEchange.getNomNaissance());
+                        contestation(this.joueur1, this.joueur2, true);
+                        return;
+                    } else if (saisie.equals("2")) {
+                        gagnantEchange = joueur2;
+                        this.arbitre.annoncer("Le gagnant de l'échange est : " + this.gagnantEchange.getPrenom() + " " + this.gagnantEchange.getNomNaissance());
+                        contestation(this.joueur1, this.joueur2, true);
+                        return;
+                    }
+            }
+        }
+    }
+    
+    /**
+     * jouerEchange réalise:
+     * - L'arbitre annonce le serveur
+     * - Annonce le vainqueur si le serveur réalise une faute au service
+     * - Demande à l'utilisateur quel sera le vainqueur de l'échange et l'annonce
+     * @param joueuse1 sous forme de Joueuse
+     * @param joueuse2 sous forme de Joueuse
+     */
+    public void jouerEchange(Joueuse joueuse1, Joueuse joueuse2) {
+        int resultat;
+        
+        while(true) {
+            this.arbitre.annoncer("Service de " + this.serveuse.getPrenom() + " " + this.serveuse.getNomNaissance());
+            
+            resultat = entrerResultat();
+            
+            switch(resultat) {
+                case 1:
+                    if(numeroService == 2) {
+                        if(serveuse == this.joueuse1) {
+                            this.gagnanteEchange = this.joueuse2;
+                        } else {
+                            this.gagnanteEchange = this.joueuse1;
+                        }
+                        
+                        numeroService = 1;
+                        this.arbitre.annoncer("Le gagnant de l'échange est : " + this.gagnanteEchange.getPrenom() + " " + this.gagnanteEchange.getNomNaissance() );
+                        return;
+                    } else {
+                        numeroService++;
+                    }
+                    break;
+
+                case 2:
+                    //nbLet++;
+                    break;
+                
+                case 3:
+                    Scanner sc = new Scanner(System.in);
+                    String saisie = "";
+                    boolean saisieCorrecte = false;
+                    
+                    while(saisieCorrecte == false) {
+                        System.out.println("Joueuse gagnante de l'échange ? :");
+                        System.out.println("1 - " + this.joueuse1.getPrenom() + " " + this.joueuse1.getNomNaissance() + "\n" + "2 - " + this.joueur2.getPrenom() + " " + this.joueur2.getNomNaissance() + "\n");
+                        saisie = sc.nextLine();
+                        
+                        if(saisie.equals("1") || saisie.equals("2")) {
+                            saisieCorrecte = true;
+                        } else {
+                            System.out.println("--- Saisie incorrecte ! ---");
+                        }
+                    }
+                    
+                    if(saisie.equals("1")) {
+                        this.gagnanteEchange = this.joueuse1;
+                        this.arbitre.annoncer("La gagnante de l'échange est : " + this.gagnanteEchange.getPrenom() + " " + this.gagnanteEchange.getNomNaissance());
+                        contestation(this.joueuse1, this.joueuse2, true);
+                        return;
+                    } else if (saisie.equals("2")) {
+                        gagnanteEchange = joueuse2;
+                        this.arbitre.annoncer("La gagnante de l'échange est : " + this.gagnanteEchange.getPrenom() + " " + this.gagnanteEchange.getNomNaissance());
+                        contestation(this.joueuse1, this.joueuse2, true);
+                        return;
+                    }
+            }
+        }
+    }
+    
+    /**
+     * Réalise l'échange sans échange avec l'utilisateur
+     * jouerEchangeAuto réalise:
+     * - L'arbitre annonce le serveur
+     * - Annonce le vainqueur si le serveur réalise une faute au service aléatoirement
+     * - Determine aléatoirement et annonce quel sera le vainqueur de l'échange
+     * @param joueuse1 sous forme de Joueuse
+     * @param joueuse2 sous forme de Joueuse
+     * @param afficherDetails sous forme de boolean
+     */
+    public void jouerEchangeAuto(Joueuse joueuse1, Joueuse joueuse2, boolean afficherDetails) {
+        int resultat;
+        
+        while(true) {
+            if(afficherDetails == true) {
+                this.arbitre.annoncer("Service de " + this.serveuse.getPrenom() + " " + this.serveuse.getNomNaissance());
+                
+                System.out.println("Entrer le résultat :");
+                System.out.println("1 - Faute au service \n2 - Let \n3 - Echange correct \n");
+            }
+            
+            Random r = new Random();
+            resultat = 1 + r.nextInt(4 - 1);
+            //resultat = 3;
+            
+            if(afficherDetails == true) {
+                System.out.println(resultat);
+            }
+            
+            switch(resultat) {
+                case 1:
+                    if(numeroService == 2) {
+                        if(this.serveuse == this.joueuse1) {
+                            this.gagnanteEchange = this.joueuse2;
+                        } else {
+                            this.gagnanteEchange = this.joueuse1;
+                        }
+                        
+                        numeroService = 1;
+                        if(afficherDetails == true) {
+                            this.arbitre.annoncer("La gagnante de l'échange est : " + this.gagnanteEchange.getPrenom() + " " + this.gagnanteEchange.getNomNaissance() );
+                        }
+                        
+                        return;
+                    } else {
+                        numeroService++;
+                    }
+                    break;
+
+                case 2:
+                    //nbLet++;
+                    break;
+                
+                case 3:
+                    
+                    if(afficherDetails == true) {
+                        System.out.println("Joueuse gagnante de l'échange ? :");
+                        System.out.println("1 - " + this.joueuse1.getPrenom() + " " + this.joueuse1.getNomNaissance() + "\n" + "2 - " + this.joueuse2.getPrenom() + " " + this.joueuse2.getNomNaissance() + "\n");
+                    }
                     
                     int saisie;
                     
                     saisie = 1 + r.nextInt(3 - 1);
                     //saisie = 2;
-
-                    System.out.println(saisie);
+                    if(afficherDetails == true) {
+                        System.out.println(saisie);
+                    }
                     
+                    if(saisie == 1) {
+                        this.gagnanteEchange = this.joueuse1;
+                        
+                        if(afficherDetails == true) {
+                            this.arbitre.annoncer("La gagnante de l'échange est : " + this.gagnanteEchange.getPrenom() + " " + this.gagnanteEchange.getNomNaissance());
+                        }
+                        contestation(this.joueuse1, this.joueuse2, afficherDetails);
+                        return;
+                    } else {
+                        this.gagnanteEchange = this.joueuse2;
+                        
+                        if(afficherDetails == true) {
+                            this.arbitre.annoncer("La gagnante de l'échange est : " + this.gagnanteEchange.getPrenom() + " " + this.gagnanteEchange.getNomNaissance());
+                        }
+                        contestation(this.joueuse1, this.joueuse2, afficherDetails);
+                        return;
+                    }
+            }
+        }
+    }
+    
+    /**
+     * Réalise l'échange sans échange avec l'utilisateur
+     * jouerEchangeAuto réalise:
+     * - L'arbitre annonce le serveur
+     * - Annonce le vainqueur si le serveur réalise une faute au service aléatoirement
+     * - Determine aléatoirement et annonce quel sera le vainqueur de l'échange
+     * @param joueur1 sous forme de Joueur
+     * @param joueur2 sous forme de Joueur
+     * @param afficherDetails sous forme de boolean
+     */
+    public void jouerEchangeAuto(Joueur joueur1, Joueur joueur2, boolean afficherDetails) {
+        int resultat;
+        
+        while(true) {
+            if(afficherDetails == true) {
+                System.out.println("Service de " + this.serveur.getPrenom() + " " + this.serveur.getNomNaissance());
+                
+                System.out.println("Entrer le résultat :");
+                System.out.println("1 - Faute au service \n2 - Let \n3 - Echange correct \n");
+            }
+            
+            Random r = new Random();
+            resultat = 1 + r.nextInt(4 - 1);
+            //resultat = 3;
+            
+            if(afficherDetails == true) {
+                System.out.println(resultat);
+            }
+            
+            switch(resultat) {
+                case 1:
+                    if(numeroService == 2) {
+                        if(this.serveur == this.joueur1) {
+                            this.gagnantEchange = this.joueur2;
+                        } else {
+                            this.gagnantEchange = this.joueur1;
+                        }
+                        
+                        numeroService = 1;
+                        if(afficherDetails == true) {
+                            this.arbitre.annoncer("Le gagnant de l'échange est : " + this.gagnantEchange.getPrenom() + " " + this.gagnantEchange.getNomNaissance() );
+                        }
+                        
+                        return;
+                    } else {
+                        numeroService++;
+                    }
+                    break;
+
+                case 2:
+                    //nbLet++;
+                    break;
+                
+                case 3:
+                    
+                    if(afficherDetails == true) {
+                        System.out.println("Joueur gagnant de l'échange ? :");
+                        System.out.println("1 - " + this.joueur1.getPrenom() + " " + this.joueur1.getNomNaissance() + "\n" + "2 - " + this.joueur2.getPrenom() + " " + this.joueur2.getNomNaissance() + "\n");
+                    }
+                    
+                    int saisie;
+                    
+                    saisie = 1 + r.nextInt(3 - 1);
+                    //saisie = 2;
+                    if(afficherDetails == true) {
+                        System.out.println(saisie);
+                    }
                     
                     if(saisie == 1) {
                         this.gagnantEchange = this.joueur1;
                         
-                        this.arbitre.annoncer("Le gagnant de l'échange est : " + this.gagnantEchange.getPrenom() + " " + this.gagnantEchange.getNomNaissance());
-                        
+                        if(afficherDetails == true) {
+                            this.arbitre.annoncer("Le gagnant de l'échange est : " + this.gagnantEchange.getPrenom() + " " + this.gagnantEchange.getNomNaissance());
+                        }
+                        contestation(this.joueur1, this.joueur2, afficherDetails);
                         return;
                     } else {
                         this.gagnantEchange = this.joueur2;
                         
-                        
-                        this.arbitre.annoncer("Le gagnant de l'échange est : " + this.gagnantEchange.getPrenom() + " " + this.gagnantEchange.getNomNaissance());
-                        
+                        if(afficherDetails == true) {
+                            this.arbitre.annoncer("Le gagnant de l'échange est : " + this.gagnantEchange.getPrenom() + " " + this.gagnantEchange.getNomNaissance());
+                        }
+                        contestation(this.joueur1, this.joueur2, afficherDetails);
                         return;
                     }
             }
+        }
+    }
+    
+    /**
+     * Réalise avec une certaine probabilité une remise en question du point attribué
+     * L'abitre peut choisir de revenir sur sa décision avec une certaine probabilité
+     * @see Echange#jouerEchange(tennis.Joueur, tennis.Joueur) 
+     * @see Echange#jouerEchange(tennis.Joueuse, tennis.Joueuse) 
+     * @see Echange#jouerEchangeAuto(tennis.Joueur, tennis.Joueur, boolean) 
+     * @see Echange#jouerEchangeAuto(tennis.Joueuse, tennis.Joueuse, boolean) 
+     * @param joueur1 sous forme de Joueur
+     * @param joueur2 sous forme de Joueur
+     * @param afficherDetails sous forme de boolean
+     */
+    public void contestation(Joueur joueur1, Joueur joueur2, boolean afficherDetails){
+        int resultat1;
+        int resultat2;
+        
+        Random r = new Random();
+        resultat1 = 1 + r.nextInt(100);
+        resultat2 = 1 + r.nextInt(5);
+        
+        //Probabilité de 1/100 que le joueur perdant conteste le point
+        if (resultat1 == 49){
+            //Si le gagnant de l'échange est le joueur1
+            if (this.gagnantEchange == joueur1){
+                if(afficherDetails == true) {
+                    System.out.println( this.joueur2.getPrenom() + " " + this.joueur2.getNomNaissance() + " conteste l'échange\n");
+                }
+                //Probabilité de 20/100 que l'arbitre réevalue son point et l'accorde à l'autre joueur
+                if (resultat2 == 3){
+                    if(afficherDetails == true) {
+                        this.arbitre.annoncer("Je revient sur ma décision et accorde le point à : " + this.joueur2.getPrenom() + " " + this.joueur2.getNomNaissance());
+                    }
+                    this.gagnantEchange = this.joueur2;                    
+                
+                }
+                else {
+                    if(afficherDetails == true) {
+                        this.arbitre.annoncer("Je ne reviens pas sur ma décision");
+                    }
+                }
+                
+            }
+            //si le gagnant de léchange est le joueur2
+            else {
+                if(afficherDetails == true) {
+                    this.arbitre.annoncer( this.joueur1.getPrenom() + " " + this.joueur1.getNomNaissance() + " conteste l'échange\n");
+                }
+                //Probabilité de 20/100 que l'arbitre réevalue son point et l'accorde à l'autre joueur
+                if (resultat2 == 3){
+                    if(afficherDetails == true) {
+                        this.arbitre.annoncer("Je reviens sur ma décision et accorde le point à : " + this.joueur1.getPrenom() + " " + this.joueur1.getNomNaissance() + " \n");
+                    }
+                    this.gagnantEchange = this.joueur1;                    
+                
+                }
+                else{
+                    if(afficherDetails == true) {
+                        this.arbitre.annoncer("Je ne reviens pas sur ma décision \n");
+                    }
+                }
+            }
+        }   
+    }
+     /**
+     * Réalise avec une certaine probabilité une remise en question du point attribué
+     * L'abitre peut choisir de revenir sur sa décision avec une certaine probabilité
+     * @see Echange#jouerEchange(tennis.Joueur, tennis.Joueur) 
+     * @see Echange#jouerEchange(tennis.Joueuse, tennis.Joueuse) 
+     * @see Echange#jouerEchangeAuto(tennis.Joueur, tennis.Joueur, boolean) 
+     * @see Echange#jouerEchangeAuto(tennis.Joueuse, tennis.Joueuse, boolean) 
+     * @param joueuse1 sous forme de Joueuse
+     * @param joueuse2 sous forme de Joueuse
+     * @param afficherDetails sous forme de boolean
+     */
+    public void contestation(Joueuse joueuse1, Joueuse joueuse2, boolean afficherDetails){
+        int resultat1;
+        int resultat2;
+        
+        Random r = new Random();
+        resultat1 = 1 + r.nextInt(100);
+        resultat2 = 1 + r.nextInt(5);
+        
+        //Probabilité de 1/100 que le joueuse perdant conteste le point
+        if (resultat1 == 49){
+            //Si le gagnant de l'échange est le joueuse1
+            if (this.gagnanteEchange == this.joueuse1){
+                if(afficherDetails == true) {
+                    System.out.println( this.joueuse2.getPrenom() + " " + this.joueuse2.getNomNaissance() + " conteste l'échange\n");
+                }
+                //Probabilité de 20/100 que l'arbitre réevalue son point et l'accorde à l'autre joueuse
+                if (resultat2 == 3){
+                    if(afficherDetails == true) {
+                        this.arbitre.annoncer("Je revient sur ma décision et accorde le point à : " + this.joueuse2.getPrenom() + " " + this.joueuse2.getNomNaissance());
+                    }
+                    this.gagnanteEchange = this.joueuse2;                    
+                
+                }
+                else {
+                    if(afficherDetails == true) {
+                        this.arbitre.annoncer("Je ne reviens pas sur ma décision");
+                    }
+                }
+                
+            }
+            //si le gagnant de léchange est le joueuse2
+            else {
+                if(afficherDetails == true) {
+                    this.arbitre.annoncer( this.joueuse1.getPrenom() + " " + this.joueuse1.getNomNaissance() + " conteste l'échange\n");
+                }
+                //Probabilité de 20/100 que l'arbitre réevalue son point et l'accorde à l'autre joueuse
+                if (resultat2 == 3){
+                    if(afficherDetails == true) {
+                        this.arbitre.annoncer("Je reviens sur ma décision et accorde le point à : " + this.joueuse1.getPrenom() + " " + this.joueuse1.getNomNaissance() + " \n");
+                    }
+                    this.gagnanteEchange = this.joueuse1;                    
+                
+                }
+                else{
+                    if(afficherDetails == true) {
+                        this.arbitre.annoncer("Je ne reviens pas sur ma décision \n");
+                    }
+                }
+            }
+        }   
     }
 }
